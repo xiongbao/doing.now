@@ -24,14 +24,9 @@ export async function getKV(): Promise<{
   list: (options?: { prefix?: string; limit?: number }) => Promise<{ keys: { name: string }[] }>
 }> {
   // In production on Cloudflare Pages, you would use:
-  try {
-    const { env } = await getCloudflareContext();
-    if (env.DOING_KV) {
-      return env.DOING_KV;
-    }
-  } catch (e) {
-    console.log("Not in Cloudflare environment, using memory store.");
-  }
+  // 必须通过这个异步函数获取上下文
+  const { env } = await getCloudflareContext();
+  return env.DOING_KV;
   
   return {
     async get(key: string) {
