@@ -16,17 +16,26 @@ export interface DoingEntry {
 // In-memory store for development
 const memoryStore = new Map<string, string>()
 
-// For Cloudflare Pages, you would access KV via platform.env
-// This is a mock implementation for local development
-export async function getKV(): Promise<{
+interface KVNamespace {
   get: (key: string) => Promise<string | null>
   put: (key: string, value: string) => Promise<void>
   list: (options?: { prefix?: string; limit?: number }) => Promise<{ keys: { name: string }[] }>
-}> {
-  // In production on Cloudflare Pages, you would use:
-  // 必须通过这个异步函数获取上下文
-  const { env } = await getCloudflareContext();
-  return env.DOING_KV;
+}
+
+// For Cloudflare Pages, you would access KV via platform.env
+// This is a mock implementation for local development
+export async function getKV(): Promise<KVNamespace> {
+  // Production: use Cloudflare KV binding via OpenNext
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      const { env } = await getCloudflareContext()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const kv = (env as any).DOING_KV as KVNamespace
+      if (kv) return kv
+    } catch {
+      // Fallback to memory store if context not available
+    }
+  }
   
   return {
     async get(key: string) {
