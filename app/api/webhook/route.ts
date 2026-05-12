@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { saveEntry, saveImage } from '@/lib/kv'
-import { sendBarkNotification } from '@/lib/bark'
 
 // This endpoint receives POST data from iOS Shortcuts
 // Supports both JSON and multipart/form-data (for file uploads)
@@ -68,12 +67,12 @@ export async function POST(request: NextRequest) {
     })
     
     // Send Bark notification
-    const notificationSent = await sendBarkNotification(entry)
+    // const notificationSent = await sendBarkNotification(entry)
     
     return NextResponse.json({ 
       success: true, 
       entry,
-      notificationSent
+      // notificationSent
     })
   } catch (error) {
     console.error('Webhook error:', error)
