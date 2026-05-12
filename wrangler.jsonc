@@ -12,7 +12,7 @@
   },
   "services": [
     {
-      "binding": "WORKER_SELF_REFERENCE",
+      "binding": "DOING_KV",
       "service": "doing-now"
     }
   ],
