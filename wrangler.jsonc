@@ -13,7 +13,7 @@
   "services": [
     {
       "binding": "DOING_KV",
-      "service": "doing-now"
+      "service": "DOING"
     }
   ],
   "images": {
