@@ -23,8 +23,8 @@ export async function getKV(): Promise<{
   list: (options?: { prefix?: string; limit?: number }) => Promise<{ keys: { name: string }[] }>
 }> {
   // In production on Cloudflare Pages, you would use:
-  // const { env } = getRequestContext()
-  // return env.DOING_KV
+  const { env } = getRequestContext()
+  return env.DOING_KV
   
   return {
     async get(key: string) {
