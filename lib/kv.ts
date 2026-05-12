@@ -1,6 +1,7 @@
 // KV interface for Cloudflare Pages
 // In production, this will use Cloudflare KV bindings
 // For local development, we use an in-memory store
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export interface DoingEntry {
   id: string
@@ -23,8 +24,14 @@ export async function getKV(): Promise<{
   list: (options?: { prefix?: string; limit?: number }) => Promise<{ keys: { name: string }[] }>
 }> {
   // In production on Cloudflare Pages, you would use:
-  const { env } = getRequestContext()
-  return env.DOING_KV
+  try {
+    const { env } = await getCloudflareContext();
+    if (env.DOING_KV) {
+      return env.DOING_KV;
+    }
+  } catch (e) {
+    console.log("Not in Cloudflare environment, using memory store.");
+  }
   
   return {
     async get(key: string) {
@@ -78,7 +85,7 @@ export async function getLatestEntries(limit = 5): Promise<DoingEntry[]> {
 // Image storage functions
 export async function saveImage(imageId: string, base64Data: string, contentType: string): Promise<void> {
   const kv = await getKV()
-  await kv.put(`image:${imageId}`, JSON.stringify({ data: base64Data, contentType, expirationTtl: 604800 }))
+  await kv.put(`image:${imageId}`, JSON.stringify({ data: base64Data, contentType }))
 }
 
 export async function getImage(imageId: string): Promise<{ data: string; contentType: string } | null> {
