@@ -13,5 +13,15 @@
       "binding": "DOING_KV",
       "id": "DOING" // 在 Cloudflare 后台 KV 页面可以看到这个 ID
     }
-  ]
+  ],
+  // 核心修复：删除原本报错的 services 数组，或者确保它指向自己
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "doing-now" // 必须改为 doing-now，不能是 my-project
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
 }
