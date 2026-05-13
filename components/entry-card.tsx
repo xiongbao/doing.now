@@ -34,7 +34,7 @@ export function EntryCard({ entry }: EntryCardProps) {
       {entry.location && (
         <div className="space-y-1">
           <span className="text-muted-foreground text-xs">Location</span>
-          <p className="text-sm truncate">{entry.location}</p>
+          <p className="text-sm truncate"><a href={entry.location} target="_blank" rel="noopener noreferrer">{entry.location}</a></p>
         </div>
       )}
       
