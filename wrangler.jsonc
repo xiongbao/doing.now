@@ -7,5 +7,11 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "DOING_KV",
+      "id": "DOING" // 在 Cloudflare 后台 KV 页面可以看到这个 ID
+    }
+  ]
 }
